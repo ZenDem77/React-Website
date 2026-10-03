@@ -11,7 +11,8 @@ function Watchlist() {
         setNewShow(event.target.value);
     }
 
-    function addShow() {
+    function addShow(event) {
+        event.preventDefault();
         if (newShow.trim() === "") return;
         setShow([...show, { id: nextId, title: newShow.trim(), watched: false }]);
         setNextId(nextId + 1);
@@ -81,7 +82,7 @@ function Watchlist() {
 
             <h1>My Watchlist</h1>
 
-            <div>
+            <form onSubmit={addShow}>
                 <input 
                     type="text"
                     placeholder="Enter a show to add"
@@ -89,9 +90,9 @@ function Watchlist() {
                     onChange={handleInputChange}/>
                 <button 
                     className="add-button"
-                    onClick={addShow}>Add Show
+                    type="submit">Add Show
                 </button>
-            </div>
+            </form>
 
             <h2>To Watch</h2>
             {renderShows(show.filter((item) => !item.watched))}
