@@ -1,9 +1,14 @@
 body {
     background-color: hsla(236, 100%, 6%, 1);
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+button,
+input {
+    font-family: inherit;
 }
 
 .watchlist {
-    font-family: Arial, sans-serif;
     text-align: center;
     margin-top: 100px;
 }
