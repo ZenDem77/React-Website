@@ -1,9 +1,15 @@
 import { useState } from 'react'
+import { Kdrama } from './models/Kdrama.js'
+import { Anime } from './models/Anime.js'
+import { Movie } from './models/Movie.js'
+
+const watchlistEntryClasses = { Kdrama, Anime, Movie }
 
 function Watchlist() {
 
     const [show, setShow] = useState([]);
     const [newShow, setNewShow] = useState("");
+    const [newShowType, setNewShowType] = useState("Kdrama");
     const [nextId, setNextId] = useState(1);
 
     function handleInputChange(event) {
@@ -13,14 +19,18 @@ function Watchlist() {
     function addShow(event) {
         event.preventDefault();
         if (newShow.trim() === "") return;
-        setShow([...show, { id: nextId, title: newShow.trim(), watched: false }]);
+        const EntryClass = watchlistEntryClasses[newShowType];
+        if (!EntryClass) {
+            throw new Error(`Unsupported watchlist entry type: ${newShowType}`);
+        }
+        setShow([...show, new EntryClass(nextId, newShow.trim())]);
         setNextId(nextId + 1);
         setNewShow("");
     }
 
     function toggleWatched(id) {
         const updated = show.map((item) =>
-            item.id === id ? { ...item, watched: !item.watched } : item
+            item.id === id ? item.withWatched(!item.watched) : item
         );
         setShow(updated);
     }
@@ -45,6 +55,9 @@ function Watchlist() {
                         className={`ml-[8px] flex-1 ${item.watched ? "line-through" : ""}`}
                     >
                         {item.title}
+                    </span>
+                    <span className="mr-[10px] rounded-full bg-[hsl(236_100%_6%)] px-[12px] py-[4px] text-[1rem] text-white">
+                        {item.type}
                     </span>
 
                     <label className="group relative ml-[10px] inline-block h-[34px] w-[34px] cursor-pointer align-middle">
@@ -95,8 +108,18 @@ function Watchlist() {
                     placeholder="Enter a show to add"
                     value={newShow}
                     onChange={handleInputChange}/>
+                <select
+                    className="ml-[8px] rounded-[5px] border-2 border-[hsla(0,0%,80%,0.5)] bg-white p-[10px] text-[1.6rem]"
+                    value={newShowType}
+                    onChange={(event) => setNewShowType(event.target.value)}
+                    aria-label="Watchlist entry type"
+                >
+                    <option value="Kdrama">Kdrama</option>
+                    <option value="Anime">Anime</option>
+                    <option value="Movie">Movie</option>
+                </select>
                 <button 
-                    className="cursor-pointer rounded-[5px] border-0 bg-[hsl(125,57%,50%)] px-[20px] py-[10px] text-[1.7rem] font-bold text-white transition-colors duration-500 hover:bg-[hsl(125,57%,35%)]"
+                    className="ml-[8px] cursor-pointer rounded-[5px] border-0 bg-[hsl(125,57%,50%)] px-[20px] py-[10px] text-[1.7rem] font-bold text-white transition-colors duration-500 hover:bg-[hsl(125,57%,35%)]"
                     type="submit">Add Show
                 </button>
             </form>
