@@ -29,6 +29,7 @@ function Watchlist() {
         setShow((currentShows) => currentShows.filter((item) => item.id !== id));
     }
 
+    const toWatchShows = show.filter((item) => !item.watched);
     const watchedShows = show.filter((item) => item.watched);
 
     const renderShows = (shows) => (
@@ -100,8 +101,16 @@ function Watchlist() {
                 </button>
             </form>
 
-            <h2 className="flex items-center gap-4 text-[2.5rem] text-white opacity-50 before:ml-[10%] before:flex-1 before:border-t before:border-white/50 before:content-[''] after:mr-[10%] after:flex-1 after:border-t after:border-white/50 after:content-['']">To Watch</h2>
-            {renderShows(show.filter((item) => !item.watched))}
+            {toWatchShows.length > 0 ? (
+                <>
+                    <h2 className="flex items-center gap-4 text-[2.5rem] text-white opacity-50 before:ml-[10%] before:flex-1 before:border-t before:border-white/50 before:content-[''] after:mr-[10%] after:flex-1 after:border-t after:border-white/50 after:content-['']">To Watch</h2>
+                    {renderShows(toWatchShows)}
+                </>
+            ) : watchedShows.length > 0 ? (
+                <p className="my-8 text-[2rem] text-white opacity-50">Add a list</p>
+            ) : (
+                <p className="my-8 text-[2rem] text-white opacity-50">Add a list first</p>
+            )}
 
             {watchedShows.length > 0 && (
                 <>
