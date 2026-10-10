@@ -29,6 +29,8 @@ function Watchlist() {
         setShow((currentShows) => currentShows.filter((item) => item.id !== id));
     }
 
+    const watchedShows = show.filter((item) => item.watched);
+
     const renderShows = (shows) => (
         <ol className="p-0">
             {shows.map((item) =>
@@ -101,8 +103,12 @@ function Watchlist() {
             <h2 className="flex items-center gap-4 text-[2.5rem] text-white opacity-50 before:ml-[10%] before:flex-1 before:border-t before:border-white/50 before:content-[''] after:mr-[10%] after:flex-1 after:border-t after:border-white/50 after:content-['']">To Watch</h2>
             {renderShows(show.filter((item) => !item.watched))}
 
-            <h2 className="flex items-center gap-4 text-[2.5rem] text-white opacity-50 before:ml-[10%] before:flex-1 before:border-t before:border-white/50 before:content-[''] after:mr-[10%] after:flex-1 after:border-t after:border-white/50 after:content-['']">Watched</h2>
-            {renderShows(show.filter((item) => item.watched))}
+            {watchedShows.length > 0 && (
+                <>
+                    <h2 className="flex items-center gap-4 text-[2.5rem] text-white opacity-50 before:ml-[10%] before:flex-1 before:border-t before:border-white/50 before:content-[''] after:mr-[10%] after:flex-1 after:border-t after:border-white/50 after:content-['']">Watched</h2>
+                    {renderShows(watchedShows)}
+                </>
+            )}
 
         </div>
     );
